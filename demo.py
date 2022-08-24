@@ -79,7 +79,9 @@ def main():
           connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_iris_connections_style()
         )
 
-    text = 'Inference time:' + '%.0f' % (inference_time * 1000) + 'ms'
+    processing_time = time.time() - start_time
+
+    text = 'Inference time: %.0fms' % (inference_time * 1000)
     frame = cv2.putText(
         frame,
         text,
@@ -89,6 +91,28 @@ def main():
         (0, 255, 0),
         thickness=2,
     )
+
+    text = 'Processing time: %.0fms' % (processing_time * 1000)
+    frame = cv2.putText(
+        frame,
+        text,
+        (10, 60),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.8,
+        (0, 255, 0),
+        thickness=2,
+    )
+    text = 'FPS: %.1f' % (1 / processing_time)
+    frame = cv2.putText(
+        frame,
+        text,
+        (10, 90),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.8,
+        (0, 255, 0),
+        thickness=2,
+    )
+
     cv2.imshow('MediaPipe Face Mesh', frame)
     if cv2.waitKey(1) == 27: # ESC
       break
