@@ -37,6 +37,9 @@ def main():
     min_detection_confidence=0.5
   )
 
+  fps = 'Now measuring.'
+  fps_start = time.time()
+  fps_counter = 0
   while cap.isOpened():
     ret, frame = cap.read()
 
@@ -102,7 +105,7 @@ def main():
         (0, 255, 0),
         thickness=2,
     )
-    text = 'FPS: %.1f' % (1 / processing_time)
+    text = f'FPS: {fps}'
     frame = cv2.putText(
         frame,
         text,
@@ -116,6 +119,13 @@ def main():
     cv2.imshow('MediaPipe Face Mesh', frame)
     if cv2.waitKey(1) == 27: # ESC
       break
+    end_time = time.time()
+    if end_time - fps_start < 1:
+      fps_counter += 1
+    else:
+      fps = fps_counter
+      fps_start = end_time
+      fps_counter = 0
 
   cap.release()
   cv2.destroyAllWindows()
